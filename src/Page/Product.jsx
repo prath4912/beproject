@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import onionGraph from "../assets/onionGraph.png";
+import onionImage from "../assets/onion.jpg"; // Importing the onion image
 import axios from "axios";
 
 export default function Product() {
   const [selectedValue, setSelectedValue] = useState("");
   const [price, setPrice] = useState(null);
   const [date, setDate] = useState("");
+  const [plantingDate, setPlantingDate] = useState("");
+  const [landSize, setLandSize] = useState("");
+  const [district, setDistrict] = useState("");
+  const [soilType, setSoilType] = useState("");
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -29,127 +34,179 @@ export default function Product() {
     }
   };
 
+  const yieldHandler = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/predict-yield",
+        {
+          planting_date: plantingDate,
+          land_size: landSize,
+          district,
+          soil_type: soilType,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      alert(`Predicted Yield: ${response.data.predicted_yield}`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <div>
-      <h1 className="bg-stone-600 py-2 ps-5 text-white text-2xl font-bold">
-        Onion
+    <div className="bg-gray-100 min-h-screen">
+      {/* Header Section */}
+      <h1 className="bg-green-600 py-4 text-white text-3xl font-bold text-center shadow-md">
+        Onion Price Prediction
       </h1>
 
-      <div className="flex   justify-around bg-amber-100 p-3 items-center">
-        <div className="  text-black  bg-amber-200 p-4 h-full rounded-lg border border-black">
-          <h2 className=" font-semibold text-xl">
-            Predict the price for a particular date or by default 15 days after
+      {/* Crop Information Section */}
+      <div className="bg-white p-6 rounded-lg shadow-lg mx-4 mt-6 flex flex-col md:flex-row items-center gap-6">
+        <img
+          src={onionImage}
+          alt="Onion"
+          className="w-full md:w-1/3 rounded-lg shadow-md"
+        />
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center md:text-left">
+            Crop Information
           </h2>
-          <div className="mt-3 ms-1">
-            <label className=" font-semibold " htmlFor="">
-              Enter Date
-            </label>
-            <br />
-            <input
-              className="  border-black border rounded-2xl p-2 m-2"
-              type="date"
-              onChange={(e) => setDate(e.target.value)}
-              value={date}
-              name=""
-              id=""
-            />
-          </div>
-          <div>
-            <label className=" font-semibold " htmlFor="dropdown">
-              Choose an option:
-            </label>
-            <br />
-            <select
-              className=" border m-2 p-1 px-3 border-black rounded-lg"
-              id="dropdown"
-              value={selectedValue}
-              onChange={handleChange}
-            >
-              <option value="" disabled>
-                Select an option
-              </option>
-              <option value="apple">Pune</option>
-            </select>
-          </div>
-          <div className="m-2">
-            <button
-              onClick={priceHandler}
-              className=" rounded-lg bg-blue-200 border border-black p-2 font-bold"
-            >
-              Predict Price
-            </button>
-          </div>
-          {price && <h1> Price of Onion - {price} </h1>}
+          <p className="text-gray-700 text-lg leading-relaxed">
+            Onions are one of the most widely cultivated crops in the world.
+            They are a staple ingredient in many cuisines and are known for
+            their pungent flavor and versatility. Onions are grown in various
+            regions and are highly dependent on market demand and climatic
+            conditions. This tool helps farmers predict the price and yield of
+            onions in specific markets, enabling better decision-making and
+            planning.
+          </p>
         </div>
-        <div className="  text-black  bg-amber-200 p-4 h-full rounded-lg border border-black">
-          <h2 className=" font-semibold text-xl">
-            Predict the Arrivals for a particular date or by default 15 days after
-          </h2>
-          <div className="mt-3 ms-1">
-            <label className=" font-semibold " htmlFor="">
-              Enter Date
-            </label>
-            <br />
-            <input
-              className="  border-black border rounded-2xl p-2 m-2"
-              type="date"
-              onChange={(e) => setDate(e.target.value)}
-              value={date}
-              name=""
-              id=""
-            />
-          </div>
-          <div>
-            <label className=" font-semibold " htmlFor="dropdown">
-              Choose an option:
-            </label>
-            <br />
-            <select
-              className=" border m-2 p-1 px-3 border-black rounded-lg"
-              id="dropdown"
-              value={selectedValue}
-              onChange={handleChange}
-            >
-              <option value="" disabled>
-                Select an option
-              </option>
-              <option value="apple">Pune</option>
-            </select>
-          </div>
-          <div className="m-2">
-            <button
-              onClick={priceHandler}
-              className=" rounded-lg bg-blue-200 border border-black p-2 font-bold"
-            >
-              Predict Price
-            </button>
-          </div>
-          {price && <h1> Price of Onion - {price} </h1>}
-        </div>
-        {/* <div className="w-1/2 bg-blue-300 p-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-          distinctio accusamus error maiores, dolore eos rem porro facere eaque
-          consequatur nostrum praesentium velit, dolor sed esse excepturi
-          dolores quam nam provident magnam earum mollitia itaque. Magnam
-          corporis officiis fugit accusantium reiciendis, totam tempore saepe
-          laboriosam excepturi reprehenderit facilis ex dolorum, dolor amet qui
-          repellat perspiciatis minima placeat necessitatibus aperiam error eius
-          voluptatum minus sunt! Alias inventore voluptate eos sed facere
-          veritatis hic animi quas? Eaque, facere placeat nam laborum
-          consequatur distinctio laboriosam libero iusto necessitatibus ipsa
-          nesciunt quidem, vero maiores aspernatur blanditiis omnis! Facilis
-          perferendis voluptas officiis optio labore dolor.
-        </div> */}
       </div>
-      {/* <div>
-        <button className=" rounded border border-black  m-2 ">
-          View Detailed Data Set
-        </button>
-      </div> */}
 
-      <div className="w-full bg-stone-900 p-2">
-        <h2 className="text-white font-bold p-3">Price Graph for Onion</h2>
-        <img src={onionGraph} alt="" />
+      {/* Prediction Sections */}
+      <div className="flex flex-col md:flex-row justify-around bg-gray-50 p-6 gap-6">
+        {/* Price Prediction Section */}
+        <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3">
+          <h2 className="font-semibold text-2xl text-gray-800 mb-4 text-center">
+            Predict Price
+          </h2>
+          <div className="mb-4">
+            <label className="font-semibold block mb-2" htmlFor="date">
+              Enter Date
+            </label>
+            <input
+              className="border border-gray-300 rounded-lg p-2 w-full"
+              type="date"
+              onChange={(e) => setDate(e.target.value)}
+              value={date}
+              id="date"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="font-semibold block mb-2" htmlFor="market">
+              Choose a Market
+            </label>
+            <select
+              className="border border-gray-300 rounded-lg p-2 w-full"
+              id="market"
+              value={selectedValue}
+              onChange={handleChange}
+            >
+              <option value="" disabled>
+                Select a Market
+              </option>
+              <option value="pune">Pune</option>
+            </select>
+          </div>
+          <button
+            onClick={priceHandler}
+            className="w-full bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600 transition-all"
+          >
+            Predict Price
+          </button>
+          {price && (
+            <h1 className="mt-4 text-center text-xl font-semibold text-green-700">
+              Predicted Price: ₹{price}
+            </h1>
+          )}
+        </div>
+
+        {/* Yield Prediction Section */}
+        <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3">
+          <h2 className="font-semibold text-2xl text-gray-800 mb-4 text-center">
+            Predict Yield
+          </h2>
+          <div className="mb-4">
+            <label className="font-semibold block mb-2" htmlFor="planting-date">
+              Date of Planting
+            </label>
+            <input
+              className="border border-gray-300 rounded-lg p-2 w-full"
+              type="date"
+              onChange={(e) => setPlantingDate(e.target.value)}
+              value={plantingDate}
+              id="planting-date"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="font-semibold block mb-2" htmlFor="land-size">
+              Land Size (in acres)
+            </label>
+            <input
+              className="border border-gray-300 rounded-lg p-2 w-full"
+              type="number"
+              onChange={(e) => setLandSize(e.target.value)}
+              value={landSize}
+              id="land-size"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="font-semibold block mb-2" htmlFor="district">
+              District
+            </label>
+            <input
+              className="border border-gray-300 rounded-lg p-2 w-full"
+              type="text"
+              onChange={(e) => setDistrict(e.target.value)}
+              value={district}
+              id="district"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="font-semibold block mb-2" htmlFor="soil-type">
+              Soil Type
+            </label>
+            <input
+              className="border border-gray-300 rounded-lg p-2 w-full"
+              type="text"
+              onChange={(e) => setSoilType(e.target.value)}
+              value={soilType}
+              id="soil-type"
+            />
+          </div>
+          <button
+            onClick={yieldHandler}
+            className="w-full bg-blue-500 text-white py-2 rounded-lg font-bold hover:bg-blue-600 transition-all"
+          >
+            Predict Yield
+          </button>
+        </div>
+      </div>
+
+      {/* Graph Section */}
+      <div className="bg-gray-800 p-6 mt-6">
+        <h2 className="text-white text-2xl font-bold mb-4 text-center">
+          Price Graph for Onion
+        </h2>
+        <img
+          src={onionGraph}
+          alt="Onion Price Graph"
+          className="rounded-lg mx-auto shadow-lg"
+        />
       </div>
     </div>
   );
